@@ -2,7 +2,7 @@
 
 mod square;
 mod position;
-mod moves;
+mod moves_new;
 use crate::position::Position;
 
 fn main() {

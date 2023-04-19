@@ -1,4 +1,4 @@
-use crate::square::ChessSquare;
+use crate::square::ChessSquare as Square;
 
 
 #[derive(Debug, PartialEq)]

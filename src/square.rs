@@ -3,7 +3,7 @@ pub struct ChessSquare {
     pub integer: u8
 }
 
-impl Square {
+impl ChessSquare {
     pub fn from_xy(x: u8, y: u8) -> ChessSquare {
         let mut character: char = 'x';
         match x {
