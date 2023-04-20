@@ -2,8 +2,9 @@
 
 mod square;
 mod position;
-mod moves_new;
+mod moves;
 use crate::position::Position;
+
 
 fn main() {
     let example_positions = vec![
@@ -18,8 +19,9 @@ fn main() {
     for pos in example_positions {
         positions.push(Position::from_string(pos).unwrap());
     }
-    for pos in positions {
-        pos.print();
-        println!("================");
-    }
+
+    let test_pos = Position::from_string(
+        "r2q1b2/p1k5/1p1p4/2pQ4/4P3/2B5/P1PP2PP/R3K1NR b KQ - 1 21"
+    ).unwrap().get_moves();
+    println!("{:#?}", test_pos);
 }

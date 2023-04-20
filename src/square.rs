@@ -1,3 +1,5 @@
+use crate::moves::Move;
+
 pub struct ChessSquare {
     pub character: char,
     pub integer: u8
@@ -5,7 +7,7 @@ pub struct ChessSquare {
 
 impl ChessSquare {
     pub fn from_xy(x: u8, y: u8) -> ChessSquare {
-        let mut character: char = 'x';
+        let character: char;
         match x {
             0 => character = 'a',
             1 => character = 'b',
@@ -25,6 +27,7 @@ impl ChessSquare {
 }
 
 
+#[derive(Copy, Clone, Debug)]
 pub struct Square {
     pub x: u8,
     pub y: u8
@@ -34,4 +37,12 @@ impl Square {
     pub fn from_xy(x: u8, y: u8) -> Square {
         Square { x, y }
     }
+    pub fn to_chess_square(&self) -> ChessSquare {
+        ChessSquare::from_xy(self.x, self.y)
+    }
+}
+
+
+trait GetOptions {
+    fn get_moves(&self) -> Vec<Move>;
 }

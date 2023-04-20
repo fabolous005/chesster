@@ -1,4 +1,8 @@
 use crate::square::ChessSquare as Square;
+use crate::square::Square as ChessSquare;
+use crate::moves::Move;
+use crate::moves::get_moves;
+
 
 
 #[derive(Debug, PartialEq)]
@@ -306,5 +310,26 @@ impl Position {
             println!("fullmove number: {:?}", self.fullmove_number.unwrap());
         }
         println!();
+    }
+
+    pub fn get_moves(&self) -> Vec<Move> {
+        let mut moves = Vec::new();
+        let mut x_counter = 0;
+        let mut y_counter = 0;
+        for row in self.rows {
+            x_counter += 1;
+            for piece in row {
+                y_counter += 1;
+                if piece != 'x' {
+                    for piece_move in get_moves(piece, ChessSquare {
+                            x: x_counter,
+                            y: y_counter,
+                        }) {
+                        moves.push(piece_move);
+                    }
+                }
+            }
+        }
+        moves
     }
 }
