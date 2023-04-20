@@ -25,7 +25,7 @@ impl PromotionPieces {
     }
 }
 
-pub enum PawnMoveOptions {
+pub enum PawnMoveOptionsBlack {
     Normal(Change),
     Double(Change),
     CaptureL(Change),
@@ -34,18 +34,38 @@ pub enum PawnMoveOptions {
 }
 
 
-impl PawnMoveOptions {
-    pub fn get() -> Vec<PawnMoveOptions> {
+impl PawnMoveOptionsBlack {
+    pub fn get() -> Vec<PawnMoveOptionsBlack> {
         let mut moves = Vec::new();
-        moves.push(PawnMoveOptions::Normal(Change { x: 0, y: 1 }));
-        moves.push(PawnMoveOptions::Double(Change { x: 0, y: 2 }));
-        moves.push(PawnMoveOptions::CaptureR(Change { x: 1, y: 1 }));
-        moves.push(PawnMoveOptions::CaptureL(Change { x: -1, y: 1 }));
-        moves.push(PawnMoveOptions::EnPassant(Change { x: 1, y: 1 }));
+        moves.push(PawnMoveOptionsBlack::Normal(Change { x: 0, y: 1 }));
+        moves.push(PawnMoveOptionsBlack::Double(Change { x: 0, y: 2 }));
+        moves.push(PawnMoveOptionsBlack::CaptureR(Change { x: 1, y: 1 }));
+        moves.push(PawnMoveOptionsBlack::CaptureL(Change { x: -1, y: 1 }));
+        moves.push(PawnMoveOptionsBlack::EnPassant(Change { x: 1, y: 1 }));
         moves
     }
 }
 
+
+pub enum PawnMoveOptionsWhite {
+    Normal(Change),
+    Double(Change),
+    CaptureL(Change),
+    CaptureR(Change),
+    EnPassant(Change),
+}
+
+impl PawnMoveOptionsWhite {
+    pub fn get() -> Vec<PawnMoveOptionsWhite> {
+        let mut moves = Vec::new();
+        moves.push(PawnMoveOptionsWhite::Normal(Change { x: 0, y: -1 }));
+        moves.push(PawnMoveOptionsWhite::Double(Change { x: 0, y: -2 }));
+        moves.push(PawnMoveOptionsWhite::CaptureR(Change { x: 1, y: -1 }));
+        moves.push(PawnMoveOptionsWhite::CaptureL(Change { x: -1, y: -1 }));
+        moves.push(PawnMoveOptionsWhite::EnPassant(Change { x: 1, y: -1 }));
+        moves
+    }
+}
 
 pub enum KnightMoveOptions {
     Normal(Change),
@@ -156,143 +176,213 @@ pub fn get_moves(piece: char, pos: Square) -> Vec<Move> {
     let mut moves = Vec::new();
     match piece {
         // TODO: add checks for out ot board, and for pieces in the way, and for check pinning
-        'P' | 'p' => {
-            for pos_option in PawnMoveOptions::get() {
+        'P' => {
+            for pos_option in PawnMoveOptionsWhite::get() {
+                let mut to = Square::from_xy(0, 0);
                 match pos_option {
-                    PawnMoveOptions::Normal(change) => {
-                        let to = Square::from_xy(
+                    PawnMoveOptionsWhite::Normal(change) => {
+                        to = Square::from_xy(
                             (pos.x as i8 +
                             change.x) as u8,
                             (pos.y as i8 +
                             change.y) as u8
                         );
-                        moves.push(Move { from: pos, to, promotion: None });
                     },
-                    PawnMoveOptions::Double(change) => {
-                        let to = Square::from_xy(
+                    PawnMoveOptionsWhite::Double(change) => {
+                        to = Square::from_xy(
                             (pos.x as i8 +
                             change.x) as u8,
                             (pos.y as i8 +
                             change.y) as u8
                         );
-                        moves.push(Move { from: pos, to, promotion: None });
                     },
-                    PawnMoveOptions::CaptureR(change) => {
-                        let to = Square::from_xy(
+                    PawnMoveOptionsWhite::CaptureR(change) => {
+                        to = Square::from_xy(
                             (pos.x as i8 +
                             change.x) as u8,
                             (pos.y as i8 +
                             change.y) as u8
                         );
-                        moves.push(Move { from: pos, to, promotion: None });
                     },
-                    PawnMoveOptions::CaptureL(change) => {
-                        let to = Square::from_xy(
+                    PawnMoveOptionsWhite::CaptureL(change) => {
+                        to = Square::from_xy(
                             (pos.x as i8 +
                             change.x) as u8,
                             (pos.y as i8 +
                             change.y) as u8
                         );
-                        moves.push(Move { from: pos, to, promotion: None });
                     },
-                    PawnMoveOptions::EnPassant(change) => {
-                        let to = Square::from_xy(
+                    PawnMoveOptionsWhite::EnPassant(change) => {
+                        to = Square::from_xy(
                             (pos.x as i8 +
                             change.x) as u8,
                             (pos.y as i8 +
                             change.y) as u8
                         );
-                        moves.push(Move { from: pos, to, promotion: None });
                     },
                 }
+                if to.stage1_check() {
+                    if to.is_promoting_white() {
+                        for promotion_piece in PromotionPieces::get() {
+                            moves.push(Move { from: pos, to, promotion: Some(promotion_piece) });
+                        }
+                    } else {
+                        moves.push(Move { from: pos, to, promotion: None });
+                    }
+                }
             }
-            if moves.last().unwrap().to.y == 0 | 8 {
-                for promote_option in PromotionPieces::get() {
-                    moves.push(Move { from: pos, to: moves.last().unwrap().to, promotion: Some(promote_option) });
+        },
+        'p' => {
+            for pos_option in PawnMoveOptionsBlack::get() {
+                let mut to = Square::from_xy(0, 0);
+                match pos_option {
+                    PawnMoveOptionsBlack::Normal(change) => {
+                        to = Square::from_xy(
+                            (pos.x as i8 +
+                            change.x) as u8,
+                            (pos.y as i8 +
+                            change.y) as u8
+                        );
+                    },
+                    PawnMoveOptionsBlack::Double(change) => {
+                        to = Square::from_xy(
+                            (pos.x as i8 +
+                            change.x) as u8,
+                            (pos.y as i8 +
+                            change.y) as u8
+                        );
+                    },
+                    PawnMoveOptionsBlack::CaptureR(change) => {
+                        to = Square::from_xy(
+                            (pos.x as i8 +
+                            change.x) as u8,
+                            (pos.y as i8 +
+                            change.y) as u8
+                        );
+                    },
+                    PawnMoveOptionsBlack::CaptureL(change) => {
+                        to = Square::from_xy(
+                            (pos.x as i8 +
+                            change.x) as u8,
+                            (pos.y as i8 +
+                            change.y) as u8
+                        );
+                    },
+                    PawnMoveOptionsBlack::EnPassant(change) => {
+                        to = Square::from_xy(
+                            (pos.x as i8 +
+                            change.x) as u8,
+                            (pos.y as i8 +
+                            change.y) as u8
+                        );
+                    },
+                }
+                if to.stage1_check() {
+                    if to.is_promoting_black() {
+                        for promotion_piece in PromotionPieces::get() {
+                            moves.push(Move { from: pos, to, promotion: Some(promotion_piece) });
+                        }
+                    } else {
+                        moves.push(Move { from: pos, to, promotion: None });
+                    }
                 }
             }
         },
         'N' | 'n' => {
             for pos_option in KnightMoveOptions::get() {
+                let mut to = Square::from_xy(0, 0);
                 match pos_option {
                     KnightMoveOptions::Normal(change) => {
-                        let to = Square::from_xy(
+                        to = Square::from_xy(
                             (pos.x as i8 +
                             change.x) as u8,
                             (pos.y as i8 +
                             change.y) as u8
                         );
-                        moves.push(Move { from: pos, to, promotion: None });
                     },
+                }
+                if to.stage1_check() {
+                    moves.push(Move { from: pos, to, promotion: None });
                 }
             }
         },
         'B' | 'b' => {
             for pos_option in BishopMoveOptions::get() {
+                let mut to = Square::from_xy(0, 0);
                 match pos_option {
                     BishopMoveOptions::Normal(change) => {
-                        let to = Square::from_xy(
+                        to = Square::from_xy(
                             (pos.x as i8 +
                             change.x) as u8,
                             (pos.y as i8 +
                             change.y) as u8
                         );
-                        moves.push(Move { from: pos, to, promotion: None });
                     },
+                }
+                if to.stage1_check() {
+                    moves.push(Move { from: pos, to, promotion: None });
                 }
             }
         },
         'R' | 'r' => {
             for pos_option in RookMoveOptions::get() {
+                let mut to = Square::from_xy(0, 0);
                 match pos_option {
                     RookMoveOptions::Normal(change) => {
-                        let to = Square::from_xy(
+                        to = Square::from_xy(
                             (pos.x as i8 +
                             change.x) as u8,
                             (pos.y as i8 +
                             change.y) as u8
                         );
-                        moves.push(Move { from: pos, to, promotion: None });
                     },
+                }
+                if to.stage1_check() {
+                    moves.push(Move { from: pos, to, promotion: None });
                 }
             }
         },
         'Q' | 'q' => {
             for pos_option in QueenMoveOptions::get() {
+                let mut to = Square::from_xy(0, 0);
                 match pos_option {
                     QueenMoveOptions::Normal(change) => {
-                        let to = Square::from_xy(
+                        to = Square::from_xy(
                             (pos.x as i8 +
                             change.x) as u8,
                             (pos.y as i8 +
                             change.y) as u8
                         );
-                        moves.push(Move { from: pos, to, promotion: None });
                     },
+                }
+                if to.stage1_check() {
+                    moves.push(Move { from: pos, to, promotion: None });
                 }
             }
         },
         'K' | 'k' => {
             for pos_option in KingMoveOptions::get() {
+                let mut to = Square::from_xy(0, 0);
                 match pos_option {
                     KingMoveOptions::Normal(change) => {
-                        let to = Square::from_xy(
+                        to = Square::from_xy(
                             (pos.x as i8 +
                             change.x) as u8,
                             (pos.y as i8 +
                             change.y) as u8
                         );
-                        moves.push(Move { from: pos, to, promotion: None });
                     },
                     KingMoveOptions::Castle(change) => {
-                        let to = Square::from_xy(
+                        to = Square::from_xy(
                             (pos.x as i8 +
                             change.x) as u8,
                             (pos.y as i8 +
                             change.y) as u8
                         );
-                        moves.push(Move { from: pos, to, promotion: None });
                     },
+                }
+                if to.stage1_check() {
+                    moves.push(Move { from: pos, to, promotion: None });
                 }
             }
         },

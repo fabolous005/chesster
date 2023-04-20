@@ -20,8 +20,12 @@ fn main() {
         positions.push(Position::from_string(pos).unwrap());
     }
 
-    let test_pos = Position::from_string(
-        "r2q1b2/p1k5/1p1p4/2pQ4/4P3/2B5/P1PP2PP/R3K1NR b KQ - 1 21"
-    ).unwrap().get_moves();
+    let test_pos_b = Position::from_string(
+//        "r2q1b2/p1k5/1p1p4/2pQ4/4P3/2B5/P1PP2PP/R3K1NR b KQ - 1 21"
+        "8/PP6/8/8/8/8/8/8 w - - 0 1"
+    ).unwrap();
+    test_pos_b.print();
+    let test_pos = test_pos_b.get_moves();
     println!("{:#?}", test_pos);
+    println!("{}", test_pos.len());
 }

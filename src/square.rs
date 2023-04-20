@@ -1,5 +1,6 @@
-use crate::moves::Move;
+use crate::moves::{Move};
 
+#[derive(PartialEq)]
 pub struct ChessSquare {
     pub character: char,
     pub integer: u8
@@ -39,6 +40,25 @@ impl Square {
     }
     pub fn to_chess_square(&self) -> ChessSquare {
         ChessSquare::from_xy(self.x, self.y)
+    }
+    // check if pieces run out of board
+    pub fn stage1_check(&self) -> bool {
+        if self.x > 7 || self.y > 7 {
+            return false;
+        }
+        true
+    }
+    pub fn is_promoting_white(&self) -> bool {
+        if self.y == 0 {
+            return true;
+        }
+        false
+    }
+    pub fn is_promoting_black(&self) -> bool {
+        if self.y == 7 {
+            return true;
+        }
+        false
     }
 }
 

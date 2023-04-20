@@ -264,17 +264,28 @@ impl Position {
                 }
             }
         }
-        Some(Position {
-            rows,
-            to_move,
-            castling,
-            en_passant: Some(Square {
-                character: en_passant_letter,
-                integer: en_passant_integer
-            }),
-            halfmove_clock,
-            fullmove_number
-        })
+        if en_passant_integer == 0 && en_passant_letter == ' ' {
+            return Some(Position {
+                rows,
+                to_move,
+                castling,
+                en_passant: None,
+                halfmove_clock,
+                fullmove_number
+            })
+        } else {
+            return Some(Position {
+                rows,
+                to_move,
+                castling,
+                en_passant: Some(Square {
+                    character: en_passant_letter,
+                    integer: en_passant_integer
+                }),
+                halfmove_clock,
+                fullmove_number
+            })
+        }
     }
 
     pub fn print_board(&self) {
@@ -299,10 +310,12 @@ impl Position {
             self.castling[1].queen_side,
             self.castling[1].king_side
         );
-        println!("en passant square: {}{}",
-            self.en_passant.as_ref().unwrap().character,
-            self.en_passant.as_ref().unwrap().integer
-        );
+        if self.en_passant != None {
+            println!("en passant square: {}{}",
+                self.en_passant.as_ref().unwrap().character,
+                self.en_passant.as_ref().unwrap().integer
+            );
+        }
         if self.halfmove_clock != None {
             println!("halfmove clock: {:?}", self.halfmove_clock.unwrap());
         }
@@ -317,9 +330,7 @@ impl Position {
         let mut x_counter = 0;
         let mut y_counter = 0;
         for row in self.rows {
-            x_counter += 1;
             for piece in row {
-                y_counter += 1;
                 if piece != 'x' {
                     for piece_move in get_moves(piece, ChessSquare {
                             x: x_counter,
@@ -328,8 +339,13 @@ impl Position {
                         moves.push(piece_move);
                     }
                 }
+                println!("received piece: {} on position {}x{}",
+                    piece, x_counter, y_counter
+                );
+                x_counter += 1;
             }
-            y_counter = 0;
+            y_counter += 1;
+            x_counter = 0;
         }
         moves
     }
