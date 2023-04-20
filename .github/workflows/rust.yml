@@ -1,4 +1,4 @@
-name: Build Rust project with nightly toolchain
+name: Rust workflows
 
 on: [push, pull_request]
 
@@ -9,10 +9,18 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Install Rust nightly toolchain
+    - name: install rust nightly
       uses: actions-rs/toolchain@v1
       with:
         toolchain: nightly
 
-    - name: Build Rust project with nightly toolchain
+    - name: build project
       run: cargo +nightly build --release
+
+    - name: Security audit
+      uses: actions-rs/audit-check@v1
+      with:
+      token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: rust-tarpaulin
+      uses: actions-rs/tarpaulin@v0.1.0

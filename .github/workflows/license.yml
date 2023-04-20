@@ -1,0 +1,10 @@
+name: Rust workflows
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Licensed CI
+      uses: jonabc/licensed-ci@v1.9.0
