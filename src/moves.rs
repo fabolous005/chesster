@@ -5,7 +5,6 @@ use crate::pieces::bishop::BishopMoveOptions;
 use crate::pieces::rook::RookMoveOptions;
 use crate::pieces::queen::QueenMoveOptions;
 use crate::pieces::king::KingMoveOptions;
-use crate::pieces::extra::Change;
 
 
 
@@ -43,7 +42,7 @@ pub fn get_moves(piece: char, pos: Square) -> Vec<Move> {
     match piece {
         'P' => {
             for pos_option in PawnMoveOptionsWhite::get() {
-                let mut to = Square::from_xy(0, 0);
+                let to: Square;
                 match pos_option {
                     PawnMoveOptionsWhite::Normal(change) => {
                         to = Square::from_xy(
@@ -107,7 +106,7 @@ pub fn get_moves(piece: char, pos: Square) -> Vec<Move> {
         },
         'p' => {
             for pos_option in PawnMoveOptionsBlack::get() {
-                let mut to = Square::from_xy(0, 0);
+                let to: Square;
                 match pos_option {
                     PawnMoveOptionsBlack::Normal(change) => {
                         to = Square::from_xy(
@@ -171,7 +170,7 @@ pub fn get_moves(piece: char, pos: Square) -> Vec<Move> {
         },
         'N' | 'n' => {
             for pos_option in KnightMoveOptions::get() {
-                let mut to = Square::from_xy(0, 0);
+                let to: Square;
                 match pos_option {
                     KnightMoveOptions::Normal(change) => {
                         to = Square::from_xy(
@@ -189,7 +188,7 @@ pub fn get_moves(piece: char, pos: Square) -> Vec<Move> {
         },
         'B' | 'b' => {
             for pos_option in BishopMoveOptions::get() {
-                let mut to = Square::from_xy(0, 0);
+                let to: Square;
                 match pos_option {
                     BishopMoveOptions::Normal(change) => {
                         to = Square::from_xy(
@@ -207,7 +206,7 @@ pub fn get_moves(piece: char, pos: Square) -> Vec<Move> {
         },
         'R' | 'r' => {
             for pos_option in RookMoveOptions::get() {
-                let mut to = Square::from_xy(0, 0);
+                let to: Square;
                 match pos_option {
                     RookMoveOptions::Normal(change) => {
                         to = Square::from_xy(
@@ -225,7 +224,7 @@ pub fn get_moves(piece: char, pos: Square) -> Vec<Move> {
         },
         'Q' | 'q' => {
             for pos_option in QueenMoveOptions::get() {
-                let mut to = Square::from_xy(0, 0);
+                let to: Square;
                 match pos_option {
                     QueenMoveOptions::Normal(change) => {
                         to = Square::from_xy(
@@ -243,7 +242,7 @@ pub fn get_moves(piece: char, pos: Square) -> Vec<Move> {
         },
         'K' | 'k' => {
             for pos_option in KingMoveOptions::get() {
-                let mut to = Square::from_xy(0, 0);
+                let to: Square;
                 match pos_option {
                     KingMoveOptions::Normal(change) => {
                         to = Square::from_xy(

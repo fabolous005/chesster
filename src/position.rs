@@ -210,8 +210,6 @@ impl Position {
                 whitespaces += 1;
             } else if whitespaces == 6 {
                 match char {
-                    // [test] 8
-                    // [test] 13
                     '0'..='9' => {
                         if ! tmp_halfmove_clock.is_empty() {
                             halfmove_clock = Some(format!(
@@ -288,6 +286,29 @@ impl Position {
         }
     }
 
+    pub fn to_string(&self) -> String {
+        let mut position_string = String::new();
+        for row in self.rows.iter() {
+            let mut empty_squares = 0;
+            for square in row.iter() {
+                if *square == 'x' {
+                    empty_squares += 1;
+                } else {
+                    if empty_squares > 0 {
+                        position_string.push_str(&empty_squares.to_string());
+                        empty_squares = 0;
+                    }
+                    position_string.push(*square);
+                }
+            }
+            if empty_squares > 0 {
+                position_string.push_str(&empty_squares.to_string());
+            }
+            position_string.push('/');
+        }
+        position_string
+    }
+
     pub fn print_board(&self) {
         println!();
         for row in self.rows.iter() {
@@ -343,9 +364,6 @@ impl Position {
                         // TODO: make checks for in check and pieces in the way
                     }
                 }
-                println!("received piece: {} on position {}x{}",
-                    piece, x_counter, y_counter
-                );
                 x_counter += 1;
             }
             y_counter += 1;

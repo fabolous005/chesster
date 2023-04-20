@@ -1,4 +1,5 @@
 #![feature(exclusive_range_pattern)]
+#![allow(dead_code)]
 
 mod square;
 mod position;
@@ -20,6 +21,15 @@ fn main() {
     for pos in example_positions {
         positions.push(Position::from_string(pos).unwrap());
     }
+    for pos in positions {
+        pos.print();
+        let moves = pos.get_moves();
+        println!("{:#?}", moves);
+        println!("{}", moves.len());
+    }
+
+
+
 
     let test_pos_b = Position::from_string(
         //     "r2q1b2/p1k5/1p1p4/2pQ4/4P3/2B5/P1PP2PP/R3K1NR b KQ - 1 21"
