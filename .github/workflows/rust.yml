@@ -1,4 +1,4 @@
-name: Build chesster
+name: Build Rust project with nightly toolchain
 
 on: [push, pull_request]
 
@@ -14,5 +14,5 @@ jobs:
       with:
         toolchain: nightly
 
-    - name: Build Rust project
-      run: cargo build
+    - name: Build Rust project with nightly toolchain
+      run: cargo +nightly build --release
