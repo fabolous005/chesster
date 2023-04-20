@@ -155,6 +155,7 @@ pub struct Move {
 pub fn get_moves(piece: char, pos: Square) -> Vec<Move> {
     let mut moves = Vec::new();
     match piece {
+        // TODO: add checks for out ot board, and for pieces in the way, and for check pinning
         'P' | 'p' => {
             for pos_option in PawnMoveOptions::get() {
                 match pos_option {

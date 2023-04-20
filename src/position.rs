@@ -329,6 +329,7 @@ impl Position {
                     }
                 }
             }
+            y_counter = 0;
         }
         moves
     }
