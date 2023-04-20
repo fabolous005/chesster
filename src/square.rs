@@ -60,6 +60,18 @@ impl Square {
         }
         false
     }
+    pub fn is_en_passant_white(&self) -> bool {
+        if self.y == 5 {
+            return true;
+        }
+        false
+    }
+    pub fn is_en_passant_black(&self) -> bool {
+        if self.y == 3 {
+            return true;
+        }
+        false
+    }
 }
 
 

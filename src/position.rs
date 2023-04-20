@@ -332,11 +332,15 @@ impl Position {
         for row in self.rows {
             for piece in row {
                 if piece != 'x' {
-                    for piece_move in get_moves(piece, ChessSquare {
+                    for piece_move in get_moves(
+                        piece, 
+                        ChessSquare {
                             x: x_counter,
                             y: y_counter,
-                        }) {
+                        }
+                    ) {
                         moves.push(piece_move);
+                        // TODO: make checks for in check and pieces in the way
                     }
                 }
                 println!("received piece: {} on position {}x{}",
