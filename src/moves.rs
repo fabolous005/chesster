@@ -37,7 +37,7 @@ pub struct Move {
 }
 
 
-pub fn get_moves(piece: char, pos: Square) -> Vec<Move> {
+pub fn get_moves_white(piece: char, pos: Square) -> Vec<Move> {
     let mut moves = Vec::new();
     match piece {
         'P' => {
@@ -104,6 +104,125 @@ pub fn get_moves(piece: char, pos: Square) -> Vec<Move> {
                 }
             }
         },
+        'N' => {
+            for pos_option in KnightMoveOptions::get() {
+                let to: Square;
+                match pos_option {
+                    KnightMoveOptions::Normal(change) => {
+                        to = Square::from_xy(
+                            (pos.x as i8 +
+                            change.x) as u8,
+                            (pos.y as i8 +
+                            change.y) as u8
+                        );
+                    },
+                }
+                if to.stage1_check() {
+                    moves.push(Move { from: pos, to, promotion: None });
+                }
+            }
+        },
+        'B' => {
+            for mut range in 1..8 {
+                for pos_option in BishopMoveOptions::get() {
+                    let to: Square;
+                    match pos_option {
+                        BishopMoveOptions::Normal(change) => {
+                            to = Square::from_xy(
+                                (pos.x as i8 +
+                                (change.x *
+                                range)) as u8,
+                                (pos.y as i8 +
+                                (change.y *
+                                range)) as u8
+                            );
+                        },
+                    }
+                    if to.stage1_check() {
+                        moves.push(Move { from: pos, to, promotion: None });
+                    }
+                }
+                range += 1;
+            }
+        },
+        'R' => {
+            for mut range in 1..8 {
+                for pos_option in RookMoveOptions::get() {
+                    let to: Square;
+                    match pos_option {
+                        RookMoveOptions::Normal(change) => {
+                            to = Square::from_xy(
+                                (pos.x as i8 +
+                                (change.x *
+                                range)) as u8,
+                                (pos.y as i8 +
+                                (change.y *
+                                range)) as u8
+                            );
+                        },
+                    }
+                    if to.stage1_check() {
+                        moves.push(Move { from: pos, to, promotion: None });
+                    }
+                }
+                range += 1;
+            }
+        },
+        'Q' => {
+            for mut range in 1..8 {
+                for pos_option in QueenMoveOptions::get() {
+                    let to: Square;
+                    match pos_option {
+                        QueenMoveOptions::Normal(change) => {
+                            to = Square::from_xy(
+                                (pos.x as i8 +
+                                change.x) as u8,
+                                (pos.y as i8 +
+                                change.y) as u8
+                            );
+                        },
+                    }
+                    if to.stage1_check() {
+                        moves.push(Move { from: pos, to, promotion: None });
+                    }
+                }
+                range += 1;
+            }
+        },
+        'K' => {
+            for pos_option in KingMoveOptions::get() {
+                let to: Square;
+                match pos_option {
+                    KingMoveOptions::Normal(change) => {
+                        to = Square::from_xy(
+                            (pos.x as i8 +
+                            change.x) as u8,
+                            (pos.y as i8 +
+                            change.y) as u8
+                        );
+                    },
+                    KingMoveOptions::Castle(change) => {
+                        to = Square::from_xy(
+                            (pos.x as i8 +
+                            change.x) as u8,
+                            (pos.y as i8 +
+                            change.y) as u8
+                        );
+                    },
+                }
+                if to.stage1_check() {
+                    moves.push(Move { from: pos, to, promotion: None });
+                }
+            }
+        },
+        _ => println!("pice not yet implemented: {}", piece)
+    }
+    moves
+}
+
+pub fn get_moves_black(piece: char, pos: Square) -> Vec<Move> {
+    let mut moves = Vec::new();
+    match piece {
         'p' => {
             for pos_option in PawnMoveOptionsBlack::get() {
                 let to: Square;
@@ -168,7 +287,7 @@ pub fn get_moves(piece: char, pos: Square) -> Vec<Move> {
                 }
             }
         },
-        'N' | 'n' => {
+        'n' => {
             for pos_option in KnightMoveOptions::get() {
                 let to: Square;
                 match pos_option {
@@ -186,7 +305,7 @@ pub fn get_moves(piece: char, pos: Square) -> Vec<Move> {
                 }
             }
         },
-        'B' | 'b' => {
+        'b' => {
             for mut range in 1..8 {
                 for pos_option in BishopMoveOptions::get() {
                     let to: Square;
@@ -209,7 +328,7 @@ pub fn get_moves(piece: char, pos: Square) -> Vec<Move> {
                 range += 1;
             }
         },
-        'R' | 'r' => {
+        'r' => {
             for mut range in 1..8 {
                 for pos_option in RookMoveOptions::get() {
                     let to: Square;
@@ -232,7 +351,7 @@ pub fn get_moves(piece: char, pos: Square) -> Vec<Move> {
                 range += 1;
             }
         },
-        'Q' | 'q' => {
+        'q' => {
             for mut range in 1..8 {
                 for pos_option in QueenMoveOptions::get() {
                     let to: Square;
@@ -253,7 +372,7 @@ pub fn get_moves(piece: char, pos: Square) -> Vec<Move> {
                 range += 1;
             }
         },
-        'K' | 'k' => {
+        'k' => {
             for pos_option in KingMoveOptions::get() {
                 let to: Square;
                 match pos_option {

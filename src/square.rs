@@ -28,7 +28,7 @@ impl ChessSquare {
 }
 
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Square {
     pub x: u8,
     pub y: u8

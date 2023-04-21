@@ -1,7 +1,8 @@
 use crate::square::ChessSquare as Square;
 use crate::square::Square as ChessSquare;
 use crate::moves::Move;
-use crate::moves::get_moves;
+use crate::moves::get_moves_white;
+use crate::moves::get_moves_black;
 
 
 
@@ -353,15 +354,29 @@ impl Position {
         for row in self.rows {
             for piece in row {
                 if piece != 'x' {
-                    for piece_move in get_moves(
-                        piece, 
-                        ChessSquare {
-                            x: x_counter,
-                            y: y_counter,
+                    if self.to_move == Color::White {
+                        for piece_move in get_moves_white(
+                            piece, 
+                            ChessSquare {
+                                x: x_counter,
+                                y: y_counter,
+                            }
+                        ) {
+                            moves.push(piece_move);
                         }
-                    ) {
-                        moves.push(piece_move);
-                        // TODO: make checks for in check and pieces in the way
+                    } else if self.to_move == Color::Black {
+                        for piece_move in get_moves_black(
+                            piece, 
+                            ChessSquare {
+                                x: x_counter,
+                                y: y_counter,
+                            }
+                        ) {
+                            moves.push(piece_move);
+                            // TODO: make checks for in check and pieces in the way
+                        }
+                    } else {
+                        panic!("invalid piece: {}", piece);
                     }
                 }
                 x_counter += 1;
@@ -372,5 +387,33 @@ impl Position {
         moves
     }
 
-    // fn get_valid(){}
+    fn get_valid(&self) -> Vec<Move> {
+        let mut valid_moves = Vec::new();
+        for move_ in self.get_moves() {
+            let mut position = self.clone();
+            // position.make_move(move_);
+            if ! position.is_in_check() {
+                valid_moves.push(move_);
+            }
+        }
+        valid_moves
+    }
+
+    fn is_in_check(&self) -> bool {
+        let mut king_square = ChessSquare { x: 0, y: 0 };
+        for (y, row) in self.rows.iter().enumerate() {
+            for (x, piece) in row.iter().enumerate() {
+                if *piece == 'K' {
+                    king_square = ChessSquare { x: x as u8, y: y as u8 };
+                }
+            }
+        }
+        for move_ in self.get_moves() {
+            if move_.to == king_square {
+                return true;
+            }
+        }
+        false
+    }
+
 }
