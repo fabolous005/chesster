@@ -21,12 +21,14 @@ fn main() {
     for pos in example_positions {
         positions.push(Position::from_string(pos).unwrap());
     }
+    /*
     for pos in positions {
         pos.print();
         let moves = pos.get_moves();
         println!("{:#?}", moves);
         println!("{}", moves.len());
     }
+    */
 
 
 
