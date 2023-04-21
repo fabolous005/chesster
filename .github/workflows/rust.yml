@@ -22,5 +22,5 @@ jobs:
 #      with:
 #      token: ${{ secrets.GITHUB_TOKEN }}
 
-#    - name: rust-tarpaulin
-#      uses: actions-rs/tarpaulin@v0.1.0
+    - name: rust-tarpaulin
+      uses: actions-rs/tarpaulin@v0.1.0
