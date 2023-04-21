@@ -34,8 +34,8 @@ fn main() {
 
 
     let test_pos_b = Position::from_string(
-        //     "r2q1b2/p1k5/1p1p4/2pQ4/4P3/2B5/P1PP2PP/R3K1NR b KQ - 1 21"
-        "8/PP6/8/8/8/8/8/8 w - - 0 1"
+        "r2q1b2/p1k5/1p1p4/2pQ4/4P3/2B5/P1PP2PP/R3K1NR b KQ - 1 21"
+        // "8/PP6/8/8/8/8/8/8 w - - 0 1"
         // Pawn1 4 + 4 = 8
         // Pawn2 4 + 4 + 4 = 12
         // = 20 "valid" moves

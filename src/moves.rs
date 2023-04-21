@@ -187,57 +187,70 @@ pub fn get_moves(piece: char, pos: Square) -> Vec<Move> {
             }
         },
         'B' | 'b' => {
-            for pos_option in BishopMoveOptions::get() {
-                let to: Square;
-                match pos_option {
-                    BishopMoveOptions::Normal(change) => {
-                        to = Square::from_xy(
-                            (pos.x as i8 +
-                            change.x) as u8,
-                            (pos.y as i8 +
-                            change.y) as u8
-                        );
-                    },
+            for mut range in 1..8 {
+                for pos_option in BishopMoveOptions::get() {
+                    let to: Square;
+                    match pos_option {
+                        BishopMoveOptions::Normal(change) => {
+                            to = Square::from_xy(
+                                (pos.x as i8 +
+                                (change.x *
+                                range)) as u8,
+                                (pos.y as i8 +
+                                (change.y *
+                                range)) as u8
+                            );
+                        },
+                    }
+                    if to.stage1_check() {
+                        moves.push(Move { from: pos, to, promotion: None });
+                    }
                 }
-                if to.stage1_check() {
-                    moves.push(Move { from: pos, to, promotion: None });
-                }
+                range += 1;
             }
         },
         'R' | 'r' => {
-            for pos_option in RookMoveOptions::get() {
-                let to: Square;
-                match pos_option {
-                    RookMoveOptions::Normal(change) => {
-                        to = Square::from_xy(
-                            (pos.x as i8 +
-                            change.x) as u8,
-                            (pos.y as i8 +
-                            change.y) as u8
-                        );
-                    },
+            for mut range in 1..8 {
+                for pos_option in RookMoveOptions::get() {
+                    let to: Square;
+                    match pos_option {
+                        RookMoveOptions::Normal(change) => {
+                            to = Square::from_xy(
+                                (pos.x as i8 +
+                                (change.x *
+                                range)) as u8,
+                                (pos.y as i8 +
+                                (change.y *
+                                range)) as u8
+                            );
+                        },
+                    }
+                    if to.stage1_check() {
+                        moves.push(Move { from: pos, to, promotion: None });
+                    }
                 }
-                if to.stage1_check() {
-                    moves.push(Move { from: pos, to, promotion: None });
-                }
+                range += 1;
             }
         },
         'Q' | 'q' => {
-            for pos_option in QueenMoveOptions::get() {
-                let to: Square;
-                match pos_option {
-                    QueenMoveOptions::Normal(change) => {
-                        to = Square::from_xy(
-                            (pos.x as i8 +
-                            change.x) as u8,
-                            (pos.y as i8 +
-                            change.y) as u8
-                        );
-                    },
+            for mut range in 1..8 {
+                for pos_option in QueenMoveOptions::get() {
+                    let to: Square;
+                    match pos_option {
+                        QueenMoveOptions::Normal(change) => {
+                            to = Square::from_xy(
+                                (pos.x as i8 +
+                                change.x) as u8,
+                                (pos.y as i8 +
+                                change.y) as u8
+                            );
+                        },
+                    }
+                    if to.stage1_check() {
+                        moves.push(Move { from: pos, to, promotion: None });
+                    }
                 }
-                if to.stage1_check() {
-                    moves.push(Move { from: pos, to, promotion: None });
-                }
+                range += 1;
             }
         },
         'K' | 'k' => {

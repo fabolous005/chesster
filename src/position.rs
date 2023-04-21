@@ -371,4 +371,6 @@ impl Position {
         }
         moves
     }
+
+    // fn get_valid(){}
 }
