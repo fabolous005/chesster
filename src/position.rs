@@ -387,33 +387,136 @@ impl Position {
         moves
     }
 
-    fn get_valid(&self) -> Vec<Move> {
+    fn get_valid(&self, moves: Vec<Move>) -> Vec<Move> {
         let mut valid_moves = Vec::new();
+        let king_square = self.get_king_square();
+        for piece in self.in_check_from() {
+            // get squares that block or take
+        }
         for move_ in self.get_moves() {
             let mut position = self.clone();
             // position.make_move(move_);
-            if ! position.is_in_check() {
-                valid_moves.push(move_);
-            }
         }
         valid_moves
     }
 
-    fn is_in_check(&self) -> bool {
-        let mut king_square = ChessSquare { x: 0, y: 0 };
-        for (y, row) in self.rows.iter().enumerate() {
-            for (x, piece) in row.iter().enumerate() {
-                if *piece == 'K' {
-                    king_square = ChessSquare { x: x as u8, y: y as u8 };
-                }
+    fn is_blocking(&self, moves: Vec<Move>) -> Vec<Move> {
+        let mut valid = Vec::new();
+        for move_ in moves {
+            for move_ in moves {
+                
             }
         }
+        valid
+    }
+
+    fn get_path(&self, square: ChessSquare) -> Vec<ChessSquare> {
+        let mut tmp_moves = Vec::new();
+        if self.get_piece(square).is_uppercase() {
+            tmp_moves.push(get_moves_white(self.get_piece(square), square));
+        } else {
+            tmp_moves.push(get_moves_black(self.get_piece(square), square));
+        }
+        todo!("completely review this function");
+    }
+    
+    fn get_check_path(&self, square: ChessSquare) -> Vec<ChessSquare> {
+        let mut tmp_moves = Vec::new();
+        let mut moves = Vec::new();
+        let piece = self.get_piece(square);
+        let king = self.get_king_square();
+        if piece.is_uppercase() {
+            for move_ in get_moves_white(piece, square) {
+                tmp_moves.push(move_);
+            }
+        } else {
+            for move_ in get_moves_black(piece, square) {
+                tmp_moves.push(move_);
+            }
+        }
+        moves.push(square);
+        match piece {
+            'B' | 'b' | 'Q' | 'q' => {
+                if square.x > king.x {
+                    if square.y > king.y {
+                        // bigger bigger
+                        for move_ in tmp_moves {
+                            if ( move_.to.x < move_.from.x ) & ( move_.to.y < move_from.y ) {
+                                moves.push(move_.to);
+                            }
+                        }
+                    } else {
+                        // bigger smaller
+                        for move_ in tmp_moves {
+                            if ( move_.to.x < move_.from.x ) & ( move_.to.y > move_.from.y ) {
+                                moves.push(move_.to);
+                            }
+                        }
+                    }
+                } else {
+                    if square.y > king.y {
+                        // smaller bigger
+                        for move_ in tmp_moves {
+                            if ( move_.to.x < move_.from.x ) & ( move_.to.y < move_from.y ) {
+                                moves.push(move_.to);
+                            }
+                        }
+                    } else {
+                        // smaller smaller
+                        for move_ in tmp_moves {
+                            if ( move_.to.x < move_.from.x ) & ( move_.to.y > move_.from.y ) {
+                                moves.push(move_.to);
+                            }
+                        }
+                    }
+                }
+            }
+            'R' | 'r' | 'Q' | 'q' => {
+                todo!("add rook moves validation");
+            }
+        }
+        moves
+    }
+
+    fn in_check_from(&self) -> Vec<ChessSquare> {
+        let mut from = Vec::new();
+        let king_square = self.get_king_square();
         for move_ in self.get_moves() {
             if move_.to == king_square {
+                from.push(move_.from);
+            }
+        }
+        from
+    }
+
+    fn is_threatened(&self, square: ChessSquare) -> bool {
+        for move_ in self.get_moves() {
+            if move_.to == square {
                 return true;
             }
         }
         false
     }
 
+    fn get_king_square(&self) -> ChessSquare {
+        for (y, row) in self.rows.iter().enumerate() {
+            for (x, piece) in row.iter().enumerate() {
+                if self.to_move == Color::White {
+                    if piece == 'K' {
+                        return ChessSquare { x: x as u8, y: y as u8 };
+                    }
+                } else {
+                    if piece == 'k' {
+                        return ChessSquare { x: x as u8, y: y as u8 };
+                    }
+                }
+            }
+        }
+        panic!("no king found");
+    }
+
+    fn get_piece(&self, square: ChessSquare) -> char {
+        self.rows[square.x as usize][square.y as usize]
+    }
+   
 }
