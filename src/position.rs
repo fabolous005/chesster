@@ -402,8 +402,8 @@ impl Position {
 
     fn is_blocking(&self, moves: Vec<Move>) -> Vec<Move> {
         let mut valid = Vec::new();
-        for move_ in moves {
-            for move_ in moves {
+        for move_ in &moves {
+            for move_ in &moves {
                 
             }
         }
@@ -441,7 +441,7 @@ impl Position {
                     if square.y > king.y {
                         // bigger bigger
                         for move_ in tmp_moves {
-                            if ( move_.to.x < move_.from.x ) & ( move_.to.y < move_from.y ) {
+                            if ( move_.to.x < move_.from.x ) & ( move_.to.y < move_.from.y ) {
                                 moves.push(move_.to);
                             }
                         }
@@ -457,7 +457,7 @@ impl Position {
                     if square.y > king.y {
                         // smaller bigger
                         for move_ in tmp_moves {
-                            if ( move_.to.x < move_.from.x ) & ( move_.to.y < move_from.y ) {
+                            if ( move_.to.x < move_.from.x ) & ( move_.to.y < move_.from.y ) {
                                 moves.push(move_.to);
                             }
                         }
@@ -472,7 +472,29 @@ impl Position {
                 }
             }
             'R' | 'r' | 'Q' | 'q' => {
+                let mut tmp_moves = Vec::new();
+                let mut moves = Vec::new();
+                let piece = self.get_piece(square);
+                let king = self.get_king_square();
+                if piece.is_uppercase() {
+                    for move_ in get_moves_white(piece, square) {
+                        tmp_moves.push(move_);
+                    }
+                } else {
+                    for move_ in get_moves_black(piece, square) {
+                        tmp_moves.push(move_);
+                    }
+                }
+                moves.push(square);
+                if square.x == king.x {
+                    for move_ in sqare.x..( king.x - 1 ) {
+                        if square.x == 
+                    }
+                }
                 todo!("add rook moves validation");
+            }
+            _ => {
+                todo!()
             }
         }
         moves
@@ -502,11 +524,11 @@ impl Position {
         for (y, row) in self.rows.iter().enumerate() {
             for (x, piece) in row.iter().enumerate() {
                 if self.to_move == Color::White {
-                    if piece == 'K' {
+                    if piece.clone() == 'K' {
                         return ChessSquare { x: x as u8, y: y as u8 };
                     }
                 } else {
-                    if piece == 'k' {
+                    if piece.clone() == 'k' {
                         return ChessSquare { x: x as u8, y: y as u8 };
                     }
                 }
