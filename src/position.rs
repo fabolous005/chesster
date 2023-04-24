@@ -6,7 +6,7 @@ use crate::moves::get_moves_black;
 
 
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Copy, Clone)]
 pub enum Color {
     White,
     Black,
@@ -389,7 +389,7 @@ impl Position {
 
     fn get_valid(&self, moves: Vec<Move>) -> Vec<Move> {
         let mut valid_moves = Vec::new();
-        let king_square = self.get_king_square();
+        let king_square = self.get_king_square(None);
         for piece in self.in_check_from() {
             // get squares that block or take
         }
@@ -424,7 +424,7 @@ impl Position {
         let mut tmp_moves = Vec::new();
         let mut moves = Vec::new();
         let piece = self.get_piece(square);
-        let king = self.get_king_square();
+        let king = self.get_king_square(None);
         if piece.is_uppercase() {
             for move_ in get_moves_white(piece, square) {
                 tmp_moves.push(move_);
@@ -436,7 +436,7 @@ impl Position {
         }
         moves.push(square);
         match piece {
-            'B' | 'b' | 'Q' | 'q' => {
+            'B' | 'b' => {
                 if square.x > king.x {
                     if square.y > king.y {
                         // bigger bigger
@@ -471,11 +471,7 @@ impl Position {
                     }
                 }
             }
-            'R' | 'r' | 'Q' | 'q' => {
-                let mut tmp_moves = Vec::new();
-                let mut moves = Vec::new();
-                let piece = self.get_piece(square);
-                let king = self.get_king_square();
+            'R' | 'r' => {
                 if piece.is_uppercase() {
                     for move_ in get_moves_white(piece, square) {
                         tmp_moves.push(move_);
@@ -487,11 +483,84 @@ impl Position {
                 }
                 moves.push(square);
                 if square.x == king.x {
-                    for move_ in sqare.x..( king.x - 1 ) {
-                        if square.x == 
+                    for move_ in square.x..( king.x - 1 ) {
+                        for tmp_move in &tmp_moves {
+                            if tmp_move.to.x == move_ {
+                                moves.push(tmp_move.to);
+                            }
+                        }
+                    }
+                } else if square.y == king.y {
+                    for move_ in square.y..( king.y - 1 ) {
+                        for tmp_move in &tmp_moves {
+                            if tmp_move.to.y == move_ {
+                                moves.push(tmp_move.to);
+                            }
+                        }
                     }
                 }
-                todo!("add rook moves validation");
+            }
+            'Q' | 'q' => {
+                if piece.is_uppercase() {
+                    for move_ in get_moves_white(piece, square) {
+                        tmp_moves.push(move_);
+                    }
+                } else {
+                    for move_ in get_moves_black(piece, square) {
+                        tmp_moves.push(move_);
+                    }
+                }
+                moves.push(square);
+                if square.x == king.x {
+                    for move_ in square.x..( king.x - 1 ) {
+                        for tmp_move in &tmp_moves {
+                            if tmp_move.to.x == move_ {
+                                moves.push(tmp_move.to);
+                            }
+                        }
+                    }
+                } else if square.y == king.y {
+                    for move_ in square.y..( king.y - 1 ) {
+                        for tmp_move in &tmp_moves {
+                            if tmp_move.to.y == move_ {
+                                moves.push(tmp_move.to);
+                            }
+                        }
+                    }
+                }
+                if square.x > king.x {
+                    if square.y > king.y {
+                        // bigger bigger
+                        for move_ in tmp_moves {
+                            if ( move_.to.x < move_.from.x ) & ( move_.to.y < move_.from.y ) {
+                                moves.push(move_.to);
+                            }
+                        }
+                    } else {
+                        // bigger smaller
+                        for move_ in tmp_moves {
+                            if ( move_.to.x < move_.from.x ) & ( move_.to.y > move_.from.y ) {
+                                moves.push(move_.to);
+                            }
+                        }
+                    }
+                } else {
+                    if square.y > king.y {
+                        // smaller bigger
+                        for move_ in tmp_moves {
+                            if ( move_.to.x < move_.from.x ) & ( move_.to.y < move_.from.y ) {
+                                moves.push(move_.to);
+                            }
+                        }
+                    } else {
+                        // smaller smaller
+                        for move_ in tmp_moves {
+                            if ( move_.to.x < move_.from.x ) & ( move_.to.y > move_.from.y ) {
+                                moves.push(move_.to);
+                            }
+                        }
+                    }
+                }
             }
             _ => {
                 todo!()
@@ -502,7 +571,7 @@ impl Position {
 
     fn in_check_from(&self) -> Vec<ChessSquare> {
         let mut from = Vec::new();
-        let king_square = self.get_king_square();
+        let king_square = self.get_king_square(None);
         for move_ in self.get_moves() {
             if move_.to == king_square {
                 from.push(move_.from);
@@ -520,10 +589,16 @@ impl Position {
         false
     }
 
-    fn get_king_square(&self) -> ChessSquare {
+    fn get_king_square(&self, color: Option<Color>) -> ChessSquare {
+        let to_move: Color;
+        if color.is_some() {
+            to_move = color.unwrap();
+        } else {
+            to_move = self.to_move.clone();
+        }
         for (y, row) in self.rows.iter().enumerate() {
             for (x, piece) in row.iter().enumerate() {
-                if self.to_move == Color::White {
+                if to_move == Color::White {
                     if piece.clone() == 'K' {
                         return ChessSquare { x: x as u8, y: y as u8 };
                     }
