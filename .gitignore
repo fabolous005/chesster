@@ -15,4 +15,4 @@ Cargo.lock
 
 *.png
 
-/lc0/
+# /lc0/
