@@ -5,6 +5,7 @@ mod square;
 mod position;
 mod moves;
 mod pieces;
+mod evaluate;
 use crate::position::Position;
 
 
