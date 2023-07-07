@@ -6,12 +6,14 @@ mod position;
 mod moves;
 mod pieces;
 mod evaluate;
+mod lines;
 
 use std::collections::HashMap;
 
 use crate::position::Position;
 use crate::evaluate::evaluate::{analyze_move, find_best, analyze_moves};
 use crate::moves::Move;
+use crate::lines::Line;
 
 use std::thread;
 use std::sync::mpsc;
@@ -54,9 +56,9 @@ fn main() {
     
     thread::spawn(move || {
         loop{
-            let result: HashMap<Move, i32> = get_lines();
-            sender_main.send(result).unwrap();
             let position: Position = receiver_sub.recv().unwrap();
+            let result: Vec<Line> = Line::get_lines(position);
+            sender_main.send(result).unwrap();
         }
     });
 
