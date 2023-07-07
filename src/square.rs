@@ -1,6 +1,6 @@
 use crate::moves::{Move};
 
-#[derive(Clone, Copy, PartialEq)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct ChessSquare {
     pub character: char,
     pub integer: u8
@@ -28,7 +28,7 @@ impl ChessSquare {
 }
 
 
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Square {
     pub x: u8,
     pub y: u8

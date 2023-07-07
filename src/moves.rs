@@ -6,10 +6,12 @@ use crate::pieces::rook::RookMoveOptions;
 use crate::pieces::queen::QueenMoveOptions;
 use crate::pieces::king::KingMoveOptions;
 
+use std::hash::{Hash, Hasher};
 
 
 
-#[derive(Debug, PartialEq)]
+
+#[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub enum PromotionPieces {
     Queen,
     Rook,
@@ -38,13 +40,28 @@ impl PromotionPieces {
 }
 
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, Clone)]
 pub struct Move {
     pub from: Square,
     pub to: Square,
     pub promotion: Option<PromotionPieces>,
 }
 
+
+        impl PartialEq for Move {
+            fn eq(&self, other: &Self) -> bool {
+                self.from == other.from && self.to == other.to
+            }
+        }
+
+        impl Eq for Move {}
+
+        impl Hash for Move {
+            fn hash<H: Hasher>(&self, state: &mut H) {
+                self.from.hash(state);
+                self.to.hash(state);
+            }
+        }
 
 pub fn get_moves_white(piece: char, pos: Square) -> Vec<Move> {
     let mut moves = Vec::new();
@@ -224,7 +241,7 @@ pub fn get_moves_white(piece: char, pos: Square) -> Vec<Move> {
                 }
             }
         },
-        _ => println!("pice not yet implemented: {}", piece)
+        _ => ()
     }
     moves
 }
@@ -407,7 +424,7 @@ pub fn get_moves_black(piece: char, pos: Square) -> Vec<Move> {
                 }
             }
         },
-        _ => println!("pice not yet implemented: {}", piece)
+        _ => ()
     }
     moves
 }

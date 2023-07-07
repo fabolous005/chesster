@@ -1,4 +1,4 @@
 mod squares;
 mod takes;
-mod evaluate;
+pub mod evaluate;
 mod material;

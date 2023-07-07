@@ -378,8 +378,6 @@ impl Position {
                             moves.push(piece_move);
                             // TODO: make checks for in check and pieces in the way
                         }
-                    } else {
-                        panic!("invalid piece: {}", piece);
                     }
                 }
                 x_counter += 1;
