@@ -48,3 +48,4 @@ pub fn find_worst(map: HashMap<Move, i32>) -> (Move, i32) {
 	let min_pair = map.iter().min_by_key(|&(_, value)| value).unwrap();
 	return (min_pair.0.clone(), min_pair.1.clone());
 }
+
