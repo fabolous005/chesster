@@ -1,1 +1,1 @@
-mod bishop;
+pub mod bishop;

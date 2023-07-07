@@ -19,6 +19,7 @@ fn main() {
         "1k1r2nr/p4pbp/2Qp1p2/8/N3P3/1B3N2/P4PPP/R3K2R w KQ - 1 17",
         "3r2nr/p1k2pbp/Q2p4/3B4/N3p3/5N2/P4PPP/1R2K2R w K - 2 20"
     ];
+
     let mut positions = Vec::new();
     for pos in example_positions {
         positions.push(Position::from_string(pos).unwrap());

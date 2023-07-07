@@ -1,6 +1,6 @@
 use crate::moves::{Move};
 
-#[derive(PartialEq)]
+#[derive(Clone, Copy, PartialEq)]
 pub struct ChessSquare {
     pub character: char,
     pub integer: u8

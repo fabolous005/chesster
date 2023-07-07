@@ -1,3 +1,5 @@
+#![allow(clippy::nested_if_else, clippy::if_same_then_else)]
+
 use crate::square::ChessSquare as Square;
 use crate::square::Square as ChessSquare;
 use crate::moves::Move;
@@ -18,6 +20,7 @@ pub struct Castling {
     queen_side: bool
 }
 
+#[derive(Copy, Clone)]
 pub struct Position {
     pub rows: [[char; 8]; 8],
     pub to_move: Color,
@@ -385,6 +388,22 @@ impl Position {
             x_counter = 0;
         }
         moves
+    }
+
+    pub fn make_move(&mut self, move_: &Move) -> &mut Self {
+        let mut piece = self.get_piece(move_.from);
+        
+        // TODO: handle promotion
+
+        let position = self.set_square(move_.from, "x".to_string());
+        let position = position.set_square(move_.to, position.rows[move_.from.y as usize][move_.from.x as usize].to_string());
+        position
+
+    }
+
+    fn set_square(&mut self, square: ChessSquare, piece: String) -> &mut Self {
+        self.rows[square.y as usize][square.x as usize] = piece.chars().next().unwrap();
+        self
     }
 
     fn get_valid(&self, moves: Vec<Move>) -> Vec<Move> {

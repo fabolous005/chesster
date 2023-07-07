@@ -9,7 +9,7 @@ use crate::pieces::king::KingMoveOptions;
 
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum PromotionPieces {
     Queen,
     Rook,
@@ -26,10 +26,19 @@ impl PromotionPieces {
         pieces.push(PromotionPieces::Knight);
         pieces
     }
+    pub fn to_string(&self) -> String {
+        match self {
+            PromotionPieces::Queen => "Q".to_string(),
+            PromotionPieces::Rook => "R".to_string(),
+            PromotionPieces::Bishop => "B".to_string(),
+            PromotionPieces::Knight => "N".to_string(),
+        }
+        // WARN: This does not handle Black or white promotion
+    }
 }
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct Move {
     pub from: Square,
     pub to: Square,
