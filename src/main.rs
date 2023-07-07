@@ -54,13 +54,14 @@ fn main() {
     let best_move = find_best(map);
     println!("{:#?}", best_move);
     
-    thread::spawn(move || {
+    let result = thread::spawn(move || {
         loop{
             let position: Position = receiver_sub.recv().unwrap();
-            let result: Vec<Line> = Line::get_lines(position);
+            let result: Vec<Line> = Line::get_lines(position, 0);
             sender_main.send(result).unwrap();
         }
     });
+
 
     let result = receiver_main.recv().unwrap();
 
