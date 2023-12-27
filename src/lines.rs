@@ -41,9 +41,9 @@ impl Line {
         let mut lines = Vec::new();
         let moves = position.get_moves();
         for move_ in moves {
-            let mut new_position = position;
-            Self::get_lines(new_position.make_move(&move_), 0);
-            
+            let new_position: &mut Position = &mut position.clone();
+            new_position.make_move(&move_);
+            lines.push(Line { move_, value: 0, line: None })
         }
         lines
     }
