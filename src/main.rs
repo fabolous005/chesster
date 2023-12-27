@@ -57,7 +57,7 @@ fn main() {
     let result = thread::spawn(move || {
         loop{
             let position: Position = receiver_sub.recv().unwrap();
-            let result: Vec<Line> = Line::get_lines(position, 0);
+            let result: Vec<Line> = Line::get_lines(&position, 0);
             sender_main.send(result).unwrap();
         }
     });
