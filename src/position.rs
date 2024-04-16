@@ -8,19 +8,19 @@ use crate::moves::get_moves_black;
 
 
 
-#[derive(Debug, PartialEq, Copy, Clone)]
+#[derive(Debug, Eq, PartialEq, Copy, Clone)]
 pub enum Color {
     White,
     Black,
 }
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Castling {
     king_side: bool,
     queen_side: bool
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Eq, PartialEq)]
 pub struct Position {
     pub rows: [[char; 8]; 8],
     pub to_move: Color,

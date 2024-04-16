@@ -17,6 +17,7 @@ impl PawnMoveOptionsBlack {
         moves.push(PawnMoveOptionsBlack::CaptureR(Change { x: 1, y: 1 }));
         moves.push(PawnMoveOptionsBlack::CaptureL(Change { x: -1, y: 1 }));
         moves.push(PawnMoveOptionsBlack::EnPassant(Change { x: 1, y: 1 }));
+        moves.push(PawnMoveOptionsBlack::EnPassant(Change { x: -1, y: 1 }));
         moves
     }
 }
@@ -39,6 +40,7 @@ impl PawnMoveOptionsWhite {
         moves.push(PawnMoveOptionsWhite::CaptureR(Change { x: 1, y: -1 }));
         moves.push(PawnMoveOptionsWhite::CaptureL(Change { x: -1, y: -1 }));
         moves.push(PawnMoveOptionsWhite::EnPassant(Change { x: 1, y: -1 }));
+        moves.push(PawnMoveOptionsWhite::EnPassant(Change { x: -1, y: -1 }));
         moves
     }
 

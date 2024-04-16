@@ -6,6 +6,7 @@ use crate::position::{Position};
 pub struct Line {
     move_: Move,
     value: i32,
+    abondened: bool,
     line: Option<Box<Vec<Line>>>
 }
 
@@ -21,6 +22,7 @@ impl Line {
                     Line {
                         move_,
                         value: 0,
+                        abondened: false,
                         line: None
                     }
                 ]
@@ -43,10 +45,22 @@ impl Line {
         for move_ in moves {
             let new_position: &mut Position = &mut position.clone();
             new_position.make_move(&move_);
-            lines.push(Line { move_, value: 0, line: None })
+            lines.push(Line { move_, value: 0, abondened: false, line: None })
         }
         lines
     }
+
+    pub fn get_line(position: &Position) -> Vec<Line> {
+        let mut lines = Vec::new();
+        let moves = position.get_moves();
+        for move_ in moves {
+            let new_position: &mut Position = &mut position.clone();
+            new_position.make_move(&move_);
+            lines.push(Line { move_, value: 0, abondened: false, line: None })
+        }
+        lines
+    }
+
 }
 
 

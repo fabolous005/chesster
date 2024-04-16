@@ -55,10 +55,19 @@ fn main() {
     println!("{:#?}", best_move);
     
     let result = thread::spawn(move || {
+        let mut position_before = None;
+        let mut new_position: Position;
+        let mut lines;
         loop{
-            let position: Position = receiver_sub.recv().unwrap();
-            let result: Vec<Line> = Line::get_lines(&position, 0);
-            sender_main.send(result).unwrap();
+            new_position = receiver_sub.recv().unwrap();
+            if position_before.is_some() && position_before != Some(new_position) {
+                new_position = position_before.unwrap();
+            }
+            
+            // TODO: get latest unsolved position
+            lines = Line::get_line(&new_position);
+            sender_main.send(lines).unwrap();
+            position_before = Some(position);
         }
     });
 
